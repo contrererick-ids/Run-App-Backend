@@ -3,7 +3,7 @@ import bcryptjs from "bcryptjs";
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
 import { calculateVdot, getTrainingPaces } from "../utils/vDotCalculator.js";
-import { json } from "express";
+//import { json } from "express";
 
 export const updateUser = asyncHandler(async (req, res, next) => {
   if (req.user.id !== req.params.id)
@@ -26,7 +26,8 @@ export const updateUser = asyncHandler(async (req, res, next) => {
     );
 
     // destructure the password from the rest of the user object
-    const { password, ...rest } = updatedUser.toObject();
+    const rest = updatedUser.toObject();
+    delete rest.password;
     // return the rest of the user object in the response
     res.status(200).json(rest);
   } catch (error) {
@@ -93,8 +94,8 @@ export const setVdot = asyncHandler(async (req, res, next) => {
     await user.save();
 
     // delete password from user object to avoid sending it to the client
-    const { password: pass, ...rest } = user.toObject();
-
+    const rest = user.toObject();
+    delete rest.password;
     // Prepare response object
     const responseData = {
       message: "VDOT updated successfully",
@@ -140,7 +141,8 @@ export const updateVdot = asyncHandler(async (req, res, next) => {
     user.vDot.trainingPaces.repetition = paces.repetition;
     await user.save();
     // delete password from user object to avoid sending it to the client
-    const { password: pass, ...rest } = user.toObject();
+    const rest = user.toObject();
+    delete rest.password;
     res.status(200).json({
       message: "VDOT updated successfully",
       user: rest,
@@ -170,7 +172,8 @@ export const updateUpcomingRaces = asyncHandler(async (req, res, next) => {
     user.upcomingRaces.push(upcomingRace);
     await user.save();
     // delete password from user object to avoid sending it to the client
-    const { password: pass, ...rest } = user.toObject();
+    const rest = user.toObject();
+    delete rest.password;
     res.status(200).json({
       message: "upcomingRaces updated successfully",
       user: rest,
@@ -201,7 +204,8 @@ export const updateRecentRaces = asyncHandler(async (req, res, next) => {
     user.recentRaces.push(recentRace);
     await user.save();
     // delete password from user object to avoid sending it to the client
-    const { password: pass, ...rest } = user.toObject();
+    const rest = user.toObject();
+    delete rest.password;
     res.status(200).json({
       message: "recentRaces updated successfully",
       user: rest,
@@ -263,7 +267,8 @@ export const updatePBs = asyncHandler(async (req, res, next) => {
     await user.save();
 
     // Remove password from user object to avoid sending it to client
-    const { password: pass, ...rest } = user.toObject();
+    const rest = user.toObject();
+    delete rest.password;
     res.status(200).json({
       message: "Personal bests updated successfully",
       user: rest,

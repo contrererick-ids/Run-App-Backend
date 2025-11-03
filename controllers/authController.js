@@ -3,7 +3,7 @@ import bcryptjs from "bcryptjs";
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
 import jwt from "jsonwebtoken";
-import { signupSchema, signinSchema } from "../validations/authValidation.js";
+//import { signupSchema, signinSchema } from "../validations/authValidation.js";
 
 // signUp controller
 export const signUp = asyncHandler(async (req, res, next) => {
@@ -75,7 +75,9 @@ export const signIn = asyncHandler(async (req, res, next) => {
     );
 
     // Remove password from the user object before sending it to the client
-    const { password: pass, ...rest } = validUser.toObject();
+    const rest = validUser.toObject();
+    delete rest.password;
+
 
     res
       .cookie("access_token", token, {
@@ -99,7 +101,8 @@ export const google = asyncHandler(async (req, res, next) => {
     const user = await User.findOne({ email: req.body.email });
     if (user) {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-      const { password: pass, ...rest } = user.toObject();
+      const rest = user.toObject();
+      delete rest.password;
       res
         .cookie("access_token", token, {
           httpOnly: true,
@@ -122,7 +125,9 @@ export const google = asyncHandler(async (req, res, next) => {
       });
       await newUser.save();
       const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET);
-      const { password: pass, ...rest } = newUser.toObject();
+      const rest = newUser.toObject();
+      delete rest.password;
+
       res
         .cookie("access_token", token, {
           httpOnly: true,
