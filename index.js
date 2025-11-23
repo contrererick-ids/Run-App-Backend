@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 dotenv.config();
-import colors from "colors";
+//import colors from "colors";
 import authRouter from "./routes/authRoutes.js"
 import userRouter from "./routes/userRoutes.js";
 import trainingRouter from "./routes/training.rotes.js";
@@ -31,7 +31,7 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/training", trainingRouter);
 
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
     const statusCode = err.statusCode || 500
     const message = err.message || 'Internal Server Error'
     res.status(statusCode).json({

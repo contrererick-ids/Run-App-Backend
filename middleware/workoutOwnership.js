@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import Workout from '../models/workoutModel.js';
+import TrainingPlan from "../models/planModel.js";
 
 export const checkWorkoutOwnership = asyncHandler(async (req, res, next) => {
   const workout = await Workout.findById(req.params.id);
