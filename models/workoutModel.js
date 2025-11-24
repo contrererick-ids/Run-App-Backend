@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import TrainingPlan from "../models/planModel.js";
 
 const splitSchema = new mongoose.Schema({
   distance: {
@@ -116,7 +117,7 @@ workoutSchema.virtual('totalDistance').get(function () {
     total += this.warmUp.distance.value;
   }
   else if(this.warmUp?.pace) {
-    let sum = 0;
+    //let sum = 0;
     // divide warm up time by pace to get the average distance
     const pace = this.warmUp.pace.pace.split(':');
     const paceInSeconds = parseInt(pace[0]) * 60 + parseInt(pace[1]);
@@ -130,7 +131,7 @@ workoutSchema.virtual('totalDistance').get(function () {
     total += this.coolDown.distance.value;
   }
   else if(this.coolDown?.pace) {
-    let sum = 0;
+    //let sum = 0;
     // divide cooldown time by pace to get the average distance
     const pace = this.coolDown.pace.pace.split(':');
     const paceInSeconds = parseInt(pace[0]) * 60 + parseInt(pace[1]);

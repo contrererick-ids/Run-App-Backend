@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
+import TrainingPlan from "../models/planModel.js";
+import Workout from '../models/workoutModel.js';
+//import bcrypt from "bcryptjs";
 
 const userSchema = new mongoose.Schema(
   {
@@ -17,7 +19,7 @@ const userSchema = new mongoose.Schema(
       trim: true,
       lowercase: true,
       match: [
-        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+        /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
         "Please provide a valid email",
       ],
     },

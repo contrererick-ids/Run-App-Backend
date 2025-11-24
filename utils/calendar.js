@@ -1,5 +1,6 @@
 // implement calendar functionalities to generate days, weeks, and months according to the actual calendar
 
+/*
 const generateDays = (startDate, endDate) => {
     const days = [];
     const currentDate = new Date(startDate);
@@ -84,3 +85,4 @@ const getWeekNumber = (date) => {
     const days = Math.floor((date - startOfYear) / (1000 * 60 * 60 * 24));
     return Math.ceil((days + startOfYear.getDay() + 1) / 7);
 }
+*/
