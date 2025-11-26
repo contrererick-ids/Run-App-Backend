@@ -32,8 +32,15 @@ jobs:
       - name: Report coverage
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
-          json_path: coverage/coverage-summary.json
+          files: coverage/coverage-summary.json
           badge: true
           fail_below_min: true
-          min_coverage: 80
+          format: text
+          output: console
+          thresholds: 50 75
+
+      - name: Add coverage summary to PR
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          path: code-coverage-results.md
 
