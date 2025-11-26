@@ -1,28 +1,28 @@
 import { jest, describe, beforeEach, it, expect } from '@jest/globals';
 import { updateUser } from '../controllers/userController.js';
+import User from '../models/userModel.js';
 
 // Mocks
 jest.mock('../middleware/error.js', () => ({
-  errorHandler: jest.fn((code, msg) => ({ statusCode: code, message: msg }))
-}));
-
-jest.mock('../models/userModel.js', () => ({
-  default: {
-    findByIdAndUpdate: jest.fn(),
-    findById: jest.fn(),
-  }
+    errorHandler: jest.fn((code, msg) => ({ statusCode: code, message: msg }))
 }));
 
 jest.mock('bcryptjs', () => ({
-  default: {
-    hashSync: jest.fn()
-  }
+    default: {
+        hashSync: jest.fn()
+    }
 }));
 
 jest.mock('express-async-handler', () => ({
   default: (fn) => (req, res, next) => {
     return Promise.resolve(fn(req, res, next)).catch(next);
-  }
+}
+}));
+
+jest.mock('../models/userModel.js', () => ({
+    default: {
+        findByIdAndUpdate: jest.fn(),
+    },
 }));
 
 describe('testing for the updateUser function', () => {
@@ -121,5 +121,64 @@ describe('testing for the updateUser function', () => {
 
         expect(res.status).not.toHaveBeenCalled();
         expect(res.json).not.toHaveBeenCalled();
+    });
+
+    it('Debe actualizar el usuario hasheando la contraseña cuando password existe en body', async () => {
+        const newPassword = 'newpassword123';
+        const hashedPassword = 'hashednewpassword';
+        
+        bcryptjs.default.hashSync.mockReturnValue(hashedPassword);
+
+        const mockUpdatedUser = {
+            _id: '123',
+            username: 'testuser',
+            email: 'test@example.com',
+            avatar: 'avatar.jpg',
+            password: hashedPassword, // Contraseña hasheada
+            toObject: jest.fn().mockReturnValue({
+                _id: '123',
+                username: 'testuser',
+                email: 'test@example.com',
+                avatar: 'avatar.jpg',
+                password: hashedPassword
+            })
+        };
+        
+        req = {
+            user: { id: '123' },
+            params: { id: '123' },
+            body: {
+                password: newPassword, // Contraseña SIN hashear en el body
+                username: 'updateduser',
+                email: 'updated@example.com'
+            }
+        };
+        
+        User.findByIdAndUpdate.mockResolvedValue(mockUpdatedUser);
+
+        await updateUser(req, res, next);
+        
+        expect(bcryptjs.default.hashSync).toHaveBeenCalledTimes(1);
+        expect(bcryptjs.default.hashSync).toHaveBeenCalledWith(newPassword, 10);
+        
+        expect(User.findByIdAndUpdate).toHaveBeenCalledWith(
+            '123',
+            {
+                password: hashedPassword, // Debe ser la hasheada
+                username: 'updateduser',
+                email: 'updated@example.com',
+                avatar: undefined
+            },
+            { new: true }
+        );
+        
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalledWith({
+            _id: '123',
+            username: 'testuser',
+            email: 'test@example.com',
+            avatar: 'avatar.jpg'
+        });
+        expect(next).not.toHaveBeenCalled();
     });
 });
