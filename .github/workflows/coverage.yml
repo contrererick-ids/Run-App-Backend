@@ -29,17 +29,8 @@ jobs:
           name: coverage-report
           path: coverage
 
-      - name: Generate coverage summary
-        uses: irongut/CodeCoverageSummary@v1.3.0
+      - name: Report coverage to PR
+        uses: davelosert/jest-coverage-report-action@v1
         with:
-          filename: coverage/coverage-summary.json
-          badge: true
-          fail_below_min: true
-          format: markdown
-          output: file
-          thresholds: 50 75
-
-      - name: Add coverage summary to PR
-        uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          path: code-coverage-results.md
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          coverage-file: coverage/coverage-final.json
