@@ -1,36 +1,14 @@
-name: Coverage
+name: coverage
 
 on:
   pull_request:
-    branches: [ main ]
+    branches:
+      - master
+      - main
 
 jobs:
   coverage:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run tests with coverage
-        run: npm test -- --coverage
-
-      - name: Upload coverage report artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: coverage
-
-      - name: Report coverage to PR
-        uses: ArtiomTr/jest-coverage-report@v2
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          coverage-file: coverage/coverage-final.json
+      - uses: actions/checkout@v3
+      - uses: ArtiomTr/jest-coverage-report-action@v2
