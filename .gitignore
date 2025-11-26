@@ -29,6 +29,4 @@ Thumbs.db
 *.bak
 # database files
 *.sqlite
-# test files
-*.test.js
 .env
