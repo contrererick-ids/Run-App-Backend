@@ -5,7 +5,7 @@ on:
     branches: [ main ]
 
 jobs:
-  test:
+  coverage:
     runs-on: ubuntu-latest
 
     steps:
@@ -30,7 +30,7 @@ jobs:
           path: coverage
 
       - name: Report coverage to PR
-        uses: davelosert/jest-coverage-report-action@v1
+        uses: ArtiomTr/jest-coverage-report@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           coverage-file: coverage/coverage-final.json
