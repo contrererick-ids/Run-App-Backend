@@ -1,0 +1,22 @@
+name: coverage
+
+on:
+  pull_request:
+    branches:
+      - main
+      - master
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      checks: write
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: ArtiomTr/jest-coverage-report-action@v2
+        with:
+          test-script: npm test -- --coverage
