@@ -2,7 +2,7 @@
 export default {
   testEnvironment: "node",
   collectCoverage: true,
-  coverageReporters: ["json", "lcov", "text", "clover"],
+  coverageReporters: ["json", "json-summary", "lcov", "text", "clover"],
   coverageThreshold: {
     global: {
       branches: 80,
