@@ -62,7 +62,7 @@ jest.unstable_mockModule('../validations/workoutValidation.js', () => ({
 // =====================================================================
 // IMPORTS (after mocks)
 // =====================================================================
-const { getWeeklySummary, createWorkout, getAllWorkouts, addToTrainingPlan } = await import('../controllers/training.Controller.js');
+const { getWeeklySummary, createWorkout, getAllWorkouts } = await import('../controllers/training.Controller.js');
 const httpMocks = (await import('node-mocks-http')).default;
 
 let req, res, next;
