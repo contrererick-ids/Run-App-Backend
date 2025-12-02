@@ -13,4 +13,13 @@ export default defineConfig([
       },
     },
   },
+  {
+    files: ["**/*.test.js", "**/*.spec.js", "**/tests/**/*.js"],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.jest, // ✅ Agrega globales de Jest
+      },
+    },
+  },
 ]);
