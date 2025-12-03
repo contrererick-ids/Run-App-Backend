@@ -549,6 +549,22 @@ describe('User Controller', () => {
         expect.objectContaining({ statusCode: 401 })
       );
     });
+
+    it('debe fallar si usuario no existe', async () => {
+      req.body = {
+        personalBests: {
+          fiveK: { time: '19:30', date: '2024-12-01' }
+        }
+      };
+
+      mockFindById.mockResolvedValue(null);
+
+      await updatePBs(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(
+        expect.objectContaining({ statusCode: 404 })
+      );
+    });
   });
 
   describe('getUser', () => {
