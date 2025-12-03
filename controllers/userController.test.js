@@ -589,6 +589,16 @@ describe('User Controller', () => {
       );
     });
 
+    it('debe fallar si personalBests no existe', async () => {
+      req.body = {};
+      const user = { ...mockUserData };
+      mockFindById.mockResolvedValue(user);
+
+      await updatePBs(req, res, next);
+
+      expect(next).not.toHaveBeenCalledWith();
+    });
+
     it('debe fallar si usuario intenta actualizar otro id que no es el suyo', async () => {
       req.user.id = 'other_user';
       req.params.id = 'user_123';
