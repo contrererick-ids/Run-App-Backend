@@ -454,7 +454,7 @@ describe('User Controller', () => {
         expect.objectContaining({ statusCode: 401 })
       );
     });
-    
+
     it('debe fallar si usuario no existe', async () => {
       req.body = {
         name: 'Test Race',
@@ -535,6 +535,18 @@ describe('User Controller', () => {
           statusCode: 400,
           message: expect.stringContaining('Invalid time format')
         })
+      );
+    });
+
+    it('debe fallar si usuario intenta actualizar otro id que no es el suyo', async () => {
+      req.user.id = 'other_user';
+      req.params.id = 'user_123';
+      req.body = { vDot: 55 };
+
+      await updatePBs(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(
+        expect.objectContaining({ statusCode: 401 })
       );
     });
   });
