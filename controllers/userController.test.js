@@ -273,11 +273,18 @@ describe('User Controller', () => {
         })
       );
     });
+
+    it('debe llamar next con error si hay fallo en el try', async () => {
+      req.body = { manualVdot: 55 };
+      const dbError = new Error('DB error');
+      mockFindById.mockRejectedValue(dbError);
+
+      await setVdot(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(dbError);
+    });
   });
 
-  // -------------------------------------------------------------------
-  // UPDATE VDOT TESTS
-  // -------------------------------------------------------------------
   describe('updateVdot', () => {
     it('debe actualizar solo el valor VDOT y recalcular paces', async () => {
       req.body = { vDot: 60 };
@@ -332,6 +339,16 @@ describe('User Controller', () => {
       expect(next).toHaveBeenCalledWith(
         expect.objectContaining({ statusCode: 401 })
       );
+    });
+
+    it('debe llamar next con error si hay fallo en el try', async () => {
+      req.body = { vDot: 55 };
+      const dbError = new Error('DB error');
+      mockFindById.mockRejectedValue(dbError);
+
+      await updateVdot(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(dbError);
     });
   });
 
@@ -398,6 +415,23 @@ describe('User Controller', () => {
       expect(next).toHaveBeenCalledWith(
         expect.objectContaining({ statusCode: 404 })
       );
+    });
+
+    it('debe llamar next con error si hay fallo en el try', async () => {
+      req.body = {
+        name: 'Ixtlahuacan Race',
+        location: 'Park',
+        distance: '5K',
+        time: '20:00',
+        timeInSeconds: 1200,
+        date: '2024-12-01'
+      };
+      const dbError = new Error('DB error');
+      mockFindById.mockRejectedValue(dbError);
+      
+      await updateUpcomingRaces(req, res, next);
+      
+      expect(next).toHaveBeenCalledWith(dbError);
     });
   });
 
@@ -471,6 +505,23 @@ describe('User Controller', () => {
       expect(next).toHaveBeenCalledWith(
         expect.objectContaining({ statusCode: 404 })
       );
+    });
+
+    it('debe llamar next con error si hay fallo en el try', async () => {
+      req.body = {
+        name: 'San Pancho Race',
+        location: 'Park',
+        distance: '5K',
+        time: '20:00',
+        timeInSeconds: 1200,
+        date: '2024-12-01'
+      };
+      const dbError = new Error('DB error');
+      mockFindById.mockRejectedValue(dbError);
+
+      await updateRecentRaces(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(dbError);
     });
   });
 
@@ -631,6 +682,17 @@ describe('User Controller', () => {
         expect.objectContaining({ statusCode: 404, message: 'No users found' })
       );
     });
+
+    it('debe llamar next si hay error en el try', async () => {
+      const dbError = new Error('DB error');
+      mockFind.mockImplementation(() => {
+        throw dbError;
+      });
+
+      await getAllUsers(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(dbError);
+    });
   });
 
   describe('deleteUser', () => {
@@ -663,6 +725,15 @@ describe('User Controller', () => {
       expect(next).toHaveBeenCalledWith(
         expect.objectContaining({ statusCode: 404 })
       );
+    });
+
+    it('debe llamar a next si hay error en el try', async () => {
+      const dbError = new Error('DB error');
+      mockFindByIdAndDelete.mockRejectedValue(dbError);
+      
+      await deleteUser(req, res, next);
+      
+      expect(next).toHaveBeenCalledWith(dbError);
     });
   });
 
