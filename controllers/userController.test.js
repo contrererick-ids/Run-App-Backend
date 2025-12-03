@@ -321,6 +321,18 @@ describe('User Controller', () => {
         expect.objectContaining({ statusCode: 404 })
       );
     });
+
+    it('debe fallar si usuario intenta actualizar otro id que no es el suyo', async () => {
+      req.user.id = 'other_user';
+      req.params.id = 'user_123';
+      req.body = { vDot: 55 };
+
+      await updateVdot(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(
+        expect.objectContaining({ statusCode: 401 })
+      );
+    });
   });
 
   describe('updateUpcomingRaces', () => {
@@ -355,6 +367,18 @@ describe('User Controller', () => {
 
       expect(next).toHaveBeenCalledWith(
         expect.objectContaining({ statusCode: 400, message: 'All fields are required' })
+      );
+    });
+
+    it('debe fallar si usuario intenta actualizar otro id que no es el suyo', async () => {
+      req.user.id = 'other_user';
+      req.params.id = 'user_123';
+      req.body = { vDot: 55 };
+
+      await updateUpcomingRaces(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(
+        expect.objectContaining({ statusCode: 401 })
       );
     });
   });

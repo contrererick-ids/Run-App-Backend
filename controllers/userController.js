@@ -184,6 +184,9 @@ export const updateUpcomingRaces = asyncHandler(async (req, res, next) => {
 });
 
 export const updateRecentRaces = asyncHandler(async (req, res, next) => {
+  if (req.user.id !== req.params.id)
+    return next(errorHandler(401, "You can only update your own account!"));
+
   try {
     const user = await User.findById(req.params.id);
     if (!user) {
