@@ -381,6 +381,24 @@ describe('User Controller', () => {
         expect.objectContaining({ statusCode: 401 })
       );
     });
+
+    it('debe fallar si usuario no existe', async () => {
+      req.body = {
+        name: 'Itzatapalapa 5K',
+        location: 'Park',
+        distance: '5K',
+        time: '20:00',
+        timeInSeconds: 1200,
+        date: '2024-12-01'
+      };
+      mockFindById.mockResolvedValue(null);
+
+      await updateUpcomingRaces(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(
+        expect.objectContaining({ statusCode: 404 })
+      );
+    });
   });
 
   describe('updateRecentRaces', () => {
